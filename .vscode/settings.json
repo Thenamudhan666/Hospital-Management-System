@@ -1,0 +1,7 @@
+{
+    "builder.serverUrl": "",
+    "builder.command": "pnpm dev\n",
+    "builder.runDevServer": true,
+    "builder.autoDetectDevServer": true,
+    "builder.launchType": "editor"
+}

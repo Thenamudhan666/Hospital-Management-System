@@ -1,0 +1,376 @@
+/* Doctor Authentication Pages Styles */
+.doctor-auth-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  background: white;
+  overflow: hidden;
+}
+
+/* Left Side - Brand & Info */
+.doctor-auth-left {
+  background: var(--primary-gradient);
+  color: white;
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.doctor-auth-left::before {
+  content: '';
+  position: absolute;
+  top: -20%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: pulse 10s infinite ease-in-out;
+}
+
+.doctor-auth-left::after {
+  content: '';
+  position: absolute;
+  bottom: -10%;
+  left: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.doctor-brand-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xl);
+  position: relative;
+  z-index: 1;
+}
+
+.doctor-brand-icon {
+  font-size: 2rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem;
+  border-radius: 50%;
+  backdrop-filter: blur(5px);
+}
+
+.doctor-brand-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.doctor-hospital-image {
+  width: 100%;
+  height: 300px;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  margin-bottom: var(--spacing-xl);
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  border: 4px solid rgba(255, 255, 255, 0.1);
+}
+
+.doctor-hospital-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 10s ease;
+}
+
+.doctor-hospital-image:hover img {
+  transform: scale(1.1);
+}
+
+.doctor-brand-content {
+  position: relative;
+  z-index: 1;
+}
+
+.doctor-brand-content h2 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-md);
+  color: white;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.doctor-brand-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  margin-bottom: var(--spacing-xl);
+  max-width: 80%;
+}
+
+.doctor-features {
+  display: flex;
+  gap: var(--spacing-xl);
+}
+
+.doctor-feature {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: flex-start;
+  background: rgba(255, 255, 255, 0.1);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-md);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.doctor-feature-icon {
+  font-size: 1.5rem;
+}
+
+.doctor-feature h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: white;
+}
+
+.doctor-feature p {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* Right Side - Form */
+.doctor-auth-right {
+  background: var(--background-color);
+  padding: var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.doctor-form-wrapper {
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  padding: 3rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
+}
+
+.doctor-auth-right h1 {
+  font-size: 2rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+  font-weight: 800;
+}
+
+.doctor-subtitle {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+}
+
+.doctor-auth-right form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.doctor-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.doctor-form-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.doctor-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.doctor-input-wrapper input,
+.doctor-input-wrapper select {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  padding-right: 2.5rem; /* Space for icon */
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+  background: var(--background-color);
+}
+
+.doctor-input-wrapper input:focus,
+.doctor-input-wrapper select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+}
+
+.doctor-input-icon {
+  position: absolute;
+  right: 1rem;
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.doctor-password-toggle {
+  pointer-events: auto;
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.doctor-password-toggle:hover {
+  color: var(--primary-color);
+}
+
+.doctor-forgot-link {
+  font-size: 0.85rem;
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.doctor-forgot-link:hover {
+  color: var(--primary-dark);
+  text-decoration: underline;
+}
+
+.doctor-checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.doctor-checkbox-group input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+  cursor: pointer;
+  accent-color: var(--primary-color);
+  border-radius: 4px;
+}
+
+.doctor-checkbox-group label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.doctor-checkbox-group a {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+
+.doctor-btn-primary {
+  padding: 1rem;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  margin-top: 0.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.doctor-btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.doctor-help-section {
+  margin-top: 2rem;
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.doctor-help-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.doctor-signup-link, .doctor-login-link {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.doctor-signup-link a, .doctor-login-link a {
+  color: var(--primary-color);
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.doctor-signup-link a:hover, .doctor-login-link a:hover {
+  text-decoration: underline;
+}
+
+.doctor-footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.doctor-footer-links a {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.doctor-footer-links a:hover {
+  color: var(--primary-color);
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .doctor-auth-container {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .doctor-auth-left {
+    min-height: auto;
+    padding: var(--spacing-lg);
+  }
+  
+  .doctor-hospital-image {
+      display: none;
+  }
+
+  .doctor-auth-left::before, .doctor-auth-left::after {
+      display: none;
+  }
+
+  .doctor-auth-right {
+    padding: var(--spacing-lg);
+    min-height: calc(100vh - 300px);
+  }
+  
+  .doctor-form-wrapper {
+      padding: 2rem;
+      box-shadow: none;
+      background: transparent;
+  }
+}

@@ -1,0 +1,402 @@
+.room-booking-container {
+  background-color: #f5f5f5;
+  min-height: 100vh;
+  padding: 32px 24px;
+}
+
+/* Header Styles */
+.booking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  gap: 24px;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.header-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+}
+
+.header-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  font-weight: 400;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+/* Status Badges */
+.status-badges {
+  display: flex;
+  gap: 16px;
+}
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #666;
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-badge:nth-child(1) .badge-dot {
+  background-color: #10b981;
+}
+
+.status-badge:nth-child(2) .badge-dot {
+  background-color: #f59e0b;
+}
+
+.status-badge:nth-child(3) .badge-dot {
+  background-color: #3b82f6;
+}
+
+/* New Booking Button */
+.new-booking-btn {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.new-booking-btn:hover {
+  background-color: #059669;
+}
+
+.plus-icon {
+  font-size: 16px;
+}
+
+/* Floor Tabs */
+.floor-tabs {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid #e5e5e5;
+  padding-bottom: 16px;
+}
+
+.floor-tab {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #999;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.floor-tab:hover {
+  color: #666;
+}
+
+.floor-tab.active {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.floor-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -17px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #10b981;
+}
+
+/* Rooms Grid */
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* Room Card */
+.room-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid;
+  transition: box-shadow 0.2s ease;
+}
+
+.room-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.room-card-green {
+  border-left-color: #10b981;
+}
+
+.room-card-blue {
+  border-left-color: #3b82f6;
+}
+
+.room-card-orange {
+  border-left-color: #f59e0b;
+}
+
+/* Room Card Header */
+.room-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.room-number {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.room-status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.room-status-badge.available {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.room-status-badge.booked {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.room-status-badge.confirmed {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+/* Room Type */
+.room-type {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 16px 0;
+}
+
+/* Room Info */
+.room-info {
+  margin-bottom: 16px;
+}
+
+.guest-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 4px 0;
+}
+
+.guest-dates {
+  font-size: 12px;
+  color: #999;
+  margin: 0;
+}
+
+.cleaning-info {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cleaning-icon {
+  font-size: 14px;
+}
+
+/* Progress Bar */
+.progress-container {
+  margin-bottom: 12px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 4px;
+  background-color: #e5e5e5;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.progress-fill-green {
+  background-color: #10b981;
+}
+
+.progress-fill-blue {
+  background-color: #3b82f6;
+}
+
+.progress-fill-orange {
+  background-color: #f59e0b;
+}
+
+/* Room Card Footer */
+.room-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  border-top: 1px solid #f0f0f0;
+}
+
+.check-in-status {
+  font-size: 12px;
+  color: #f59e0b;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.more-options {
+  background: none;
+  border: none;
+  color: #999;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease;
+}
+
+.more-options:hover {
+  color: #666;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .rooms-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .booking-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-controls {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .status-badges {
+    flex-wrap: wrap;
+  }
+
+  .new-booking-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .room-booking-container {
+    padding: 20px 16px;
+  }
+
+  .booking-header {
+    margin-bottom: 24px;
+  }
+
+  .header-title {
+    font-size: 24px;
+  }
+
+  .rooms-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .room-card {
+    padding: 16px;
+  }
+
+  .floor-tabs {
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .floor-tab {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .room-booking-container {
+    padding: 16px 12px;
+  }
+
+  .rooms-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .floor-tabs {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
+
+  .header-title {
+    font-size: 20px;
+  }
+
+  .status-badges {
+    flex-direction: column;
+    width: 100%;
+  }
+}

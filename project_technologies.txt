@@ -1,0 +1,332 @@
+========================================================
+  TECHNOLOGIES & TOOLS USED IN THE PROJECT
+  Hospital Management System (HMS) - DBMS Project
+========================================================
+
+
+1. FRONTEND
+-----------
+  - React (v19.2.0)             — JavaScript library for building user interfaces
+  - React DOM (v19.2.0)         — React package for DOM rendering
+  - React Router DOM (v7.12.0)  — Client-side routing and navigation
+  - Vite (Rolldown-Vite v7.2.5) — Fast frontend build tool and dev server
+  - JSX                         — JavaScript XML syntax for writing React components
+  - CSS (Vanilla)               — Styling (10 CSS files for different components)
+  - JavaScript (ES6+)           — Core programming language (modules, arrow functions, async/await, fetch API)
+
+
+2. BACKEND
+----------
+  - Node.js                     — JavaScript runtime for building the server
+  - Express.js (v5.2.1)         — Web framework for building REST APIs
+  - mysql2 (v3.16.1)            — MySQL database driver for Node.js
+  - dotenv (v17.2.3)            — Loads environment variables from .env file
+  - CommonJS Modules            — Module system used in backend (require/module.exports)
+
+
+3. DATABASE
+-----------
+  - MySQL                       — Relational Database Management System (RDBMS)
+  - Database Name: HMS
+
+  Tables:
+    a) user
+       - userid (INT, AUTO_INCREMENT, PRIMARY KEY)
+       - username (VARCHAR)
+       - userphno (BIGINT, UNIQUE)
+       - usermail (VARCHAR)
+       - userpwd (VARCHAR)
+
+    b) doctor
+       - docid (INT, AUTO_INCREMENT starting 10001, PRIMARY KEY)
+       - docname (VARCHAR)
+       - docphno (BIGINT, UNIQUE)
+       - docemail (VARCHAR)
+       - docspe (VARCHAR) — Specialisation
+       - docpwd (VARCHAR)
+
+    c) room
+       - room_id (INT, AUTO_INCREMENT, PRIMARY KEY)
+       - user_id (INT, FOREIGN KEY → user.userid)
+       - doctor_id (INT, FOREIGN KEY → doctor.docid)
+       - doctor_name (VARCHAR)
+       - user_name (VARCHAR)
+       - room_status (VARCHAR, DEFAULT 'Available')
+       - room_type (VARCHAR)
+
+    d) admin
+       - name
+       - pwd
+
+  SQL Concepts Used:
+    - CREATE TABLE IF NOT EXISTS
+    - INSERT, SELECT, UPDATE
+    - AUTO_INCREMENT
+    - PRIMARY KEY, UNIQUE constraints
+    - FOREIGN KEY with ON DELETE CASCADE and ON UPDATE CASCADE
+    - ALTER TABLE (ADD CONSTRAINT)
+    - Connection Pooling (connectionLimit: 10)
+
+
+4. API / REST ENDPOINTS
+-----------------------
+  - GET  /api/status              — Server health check
+  - POST /api/signup              — User registration
+  - POST /api/login               — User authentication
+  - GET  /api/rooms               — Fetch all rooms
+  - POST /api/rooms               — Create a new room
+  - POST /api/rooms/:id/book      — Book/reserve a room
+  - PUT  /api/rooms/:id/doctor    — Assign a doctor to a room
+  - PUT  /api/rooms/:id/confirm   — Confirm a room reservation
+  - PUT  /api/rooms/:id/cancel    — Cancel a room reservation
+  - POST /api/doctor-signup       — Doctor registration
+  - POST /api/doctor-login        — Doctor authentication
+  - GET  /api/doctors             — Fetch all doctors
+  - POST /api/admin-login         — Admin authentication
+  - GET  /api/doctor/:id/rooms    — Get rooms assigned to a doctor
+
+  HTTP Methods Used: GET, POST, PUT, DELETE, OPTIONS
+  Manual CORS implementation (middleware)
+
+
+5. DEVELOPMENT TOOLS
+--------------------
+  - npm                          — Package manager
+  - ESLint (v9.39.1)             — JavaScript linter for code quality
+  - @vitejs/plugin-react (v5.1.1)— Vite plugin for React support
+  - VS Code                      — Code editor
+  - Git                          — Version control
+  - .env file                    — Environment variable management
+  - Batch scripts (.bat)         — build_and_run.bat, start_project.bat
+
+
+6. FRONTEND PAGES / COMPONENTS (React)
+---------------------------------------
+  - Starter.jsx                  — Landing/role selection page
+  - Login.jsx                    — User login page
+  - Signup.jsx                   — User registration page
+  - Home.jsx                     — User home/dashboard
+  - userRoomBooking.jsx          — Room booking page for users
+  - DoctorLogin.jsx              — Doctor login page
+  - DoctorSignup.jsx             — Doctor registration page
+  - DoctorHome.jsx               — Doctor dashboard
+  - AdminLogin.jsx               — Admin login page
+  - AdminHome.jsx                — Admin dashboard
+  - App.jsx                      — Main app with routing
+  - main.jsx                     — Entry point (renders App)
+
+
+7. KEY CONCEPTS USED
+--------------------
+  - Client-Server Architecture
+  - RESTful API Design
+  - CRUD Operations (Create, Read, Update, Delete)
+  - Single Page Application (SPA) with React Router
+  - Connection Pooling (MySQL)
+  - Environment Variables for configuration
+  - Static file serving (Express serves built frontend)
+  - Role-based access (User, Doctor, Admin)
+  - Foreign Key relationships between tables
+  - Middleware (CORS, JSON parsing)
+
+8. SQL QUERIES EXECUTED BY THE BACKEND
+--------------------------------------
+  Below are the raw SQL queries written in the backend (index.js) and executed against the database:
+
+  -- Table Creation
+  1. CREATE TABLE IF NOT EXISTS user (
+       userid INT AUTO_INCREMENT PRIMARY KEY,
+       username VARCHAR(255) NOT NULL,
+       userphno BIGINT UNIQUE NOT NULL,
+       usermail VARCHAR(255) NOT NULL,
+       userpwd VARCHAR(255) NOT NULL
+     ) AUTO_INCREMENT=1;
+
+  2. CREATE TABLE IF NOT EXISTS doctor (
+       docid INT AUTO_INCREMENT PRIMARY KEY,
+       docname VARCHAR(30),
+       docphno BIGINT UNIQUE,
+       docemail VARCHAR(30),
+       docspe VARCHAR(30),
+       docpwd VARCHAR(30)
+     ) AUTO_INCREMENT=10001;
+
+  3. CREATE TABLE IF NOT EXISTS room (
+       room_id INT AUTO_INCREMENT PRIMARY KEY,
+       user_id INT,
+       doctor_id INT,
+       doctor_name VARCHAR(30),
+       user_name VARCHAR(40),
+       room_status VARCHAR(30) DEFAULT 'Available',
+       room_type VARCHAR(30),
+       FOREIGN KEY (user_id) REFERENCES user(userid) ON DELETE CASCADE ON UPDATE CASCADE,
+       FOREIGN KEY (doctor_id) REFERENCES doctor(docid) ON DELETE CASCADE ON UPDATE CASCADE
+     ) AUTO_INCREMENT=1;
+
+  -- User Auth
+  4. INSERT INTO user (userphno, username, usermail, userpwd) VALUES (?, ?, ?, ?)
+  5. SELECT * FROM user WHERE userphno = ? AND userpwd = ?
+
+  -- Doctor Auth
+  6. INSERT INTO doctor (docname, docphno, docemail, docspe, docpwd) VALUES (?, ?, ?, ?, ?)
+  7. SELECT * FROM doctor WHERE docphno = ? AND docpwd = ?
+
+  -- Admin Auth
+  8. SELECT * FROM admin WHERE name = ? AND pwd = ?
+
+  -- Room Management
+  9. SELECT * FROM room
+ 10. INSERT INTO room (room_type, room_status) VALUES (?, 'Available')
+ 11. UPDATE room SET room_status = 'Reserved', user_name = ?, user_id = ? WHERE room_id = ?
+ 12. UPDATE room SET doctor_name = ?, doctor_id = ? WHERE room_id = ?
+ 13. SELECT doctor_name FROM room WHERE room_id = ?
+ 14. UPDATE room SET room_status = 'Confirmed' WHERE room_id = ?
+ 15. UPDATE room SET room_status = 'Available', user_name = NULL, doctor_name = NULL, user_id = NULL, doctor_id = NULL WHERE room_id = ?
+
+  -- Doctor's Rooms
+ 16. SELECT * FROM doctor
+ 17. SELECT * FROM room WHERE doctor_id = ?
+
+  -- Foreign Key Alterations
+ 18. ALTER TABLE room ADD CONSTRAINT fk_room_user FOREIGN KEY (user_id) REFERENCES user(userid) ON DELETE CASCADE ON UPDATE CASCADE;
+ 19. ALTER TABLE room ADD CONSTRAINT fk_room_doctor FOREIGN KEY (doctor_id) REFERENCES doctor(docid) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+9. ADVANCED DBMS CONCEPTS DEMONSTRATION (Week 4 to 6 Criteria)
+--------------------------------------------------------------
+The following advanced SQL queries and PL/SQL blocks have been designed for the HMS database so you can secure full marks (5/5) in your project demonstration and report!
+
+*** CRITERION 1: Constraints, Aggregate Functions & Set Operations ***
+
+  A) Constraints Showcase (Already in your CREATE TABLE statements):
+     - PRIMARY KEY, UNIQUE, NOT NULL, AUTO_INCREMENT, FOREIGN KEY, ON DELETE CASCADE.
+  
+  B) Aggregate Functions with GROUP BY / HAVING:
+     -- Query: Find which doctors have been assigned to more than 1 room reservation.
+     SELECT doctor_name, COUNT(room_id) AS total_reservations
+     FROM room
+     WHERE doctor_name IS NOT NULL
+     GROUP BY doctor_name
+     HAVING COUNT(room_id) > 1;
+
+  C) Set Operations (UNION):
+     -- Query: Generate an emergency contact list combining both User and Doctor phone numbers.
+     SELECT username AS name, userphno AS contact_number, 'Patient' AS role FROM user
+     UNION
+     SELECT docname AS name, docphno AS contact_number, 'Doctor' AS role FROM doctor;
+
+
+*** CRITERION 2: Writing Complex Queries Using Subqueries, Joins & Views ***
+
+  A) Multiple Joins (INNER & LEFT JOIN):
+     -- Query: Get a comprehensive overview of all rooms, showing patient details and doctor specialization.
+     SELECT r.room_id, r.room_status, u.username AS patient_name, d.docname AS doctor_name, d.docspe AS specialisation
+     FROM room r
+     LEFT JOIN user u ON r.user_id = u.userid
+     LEFT JOIN doctor d ON r.doctor_id = d.docid;
+
+  B) Correlated or Nested Subquery:
+     -- Query: Find all Doctors who currently DO NOT have any rooms assigned to them.
+     SELECT docid, docname, docspe
+     FROM doctor d
+     WHERE NOT EXISTS (
+         SELECT 1 FROM room r WHERE r.doctor_id = d.docid
+     );
+
+  C) Meaningful Views:
+     -- Query: Create a secure View for front-desk staff to see only active reservations (hiding passwords/IDs).
+     CREATE VIEW active_reservations AS
+     SELECT r.room_id, r.room_type, r.room_status, u.username AS patient, d.docname AS assigned_doctor
+     FROM room r
+     INNER JOIN user u ON r.user_id = u.userid
+     INNER JOIN doctor d ON r.doctor_id = d.docid
+     WHERE r.room_status != 'Available';
+     
+     -- To see the view:
+     SELECT * FROM active_reservations;
+
+
+*** CRITERION 3: Writing Queries Using Functions, Triggers, Cursors & Exception Handling ***
+
+  -- Note: These run in MySQL using the DELIMITER command.
+
+  A) Triggers (Logic & Exception Handling):
+     -- Query: Create a trigger that prevents a user from booking a room if it is already reserved or confirmed. It handles the exception by throwing an explicit SQL error.
+     DELIMITER $$
+     CREATE TRIGGER before_room_booking
+     BEFORE UPDATE ON room
+     FOR EACH ROW
+     BEGIN
+         IF NEW.room_status = 'Reserved' AND OLD.room_status != 'Available' THEN
+             SIGNAL SQLSTATE '45000'
+             SET MESSAGE_TEXT = 'Exception: This room is already occupied and cannot be booked.';
+         END IF;
+     END$$
+     DELIMITER ;
+
+  B) Stored Functions:
+     -- Query: Create a function that calculates and returns the total number of available rooms.
+     DELIMITER $$
+     CREATE FUNCTION get_available_rooms_count()
+     RETURNS INT
+     DETERMINISTIC
+     BEGIN
+         DECLARE available_count INT;
+         SELECT COUNT(*) INTO available_count FROM room WHERE room_status = 'Available';
+         RETURN available_count;
+     END$$
+     DELIMITER ;
+     
+     -- To use the function: 
+     SELECT get_available_rooms_count() AS available_rooms;
+
+  C) Cursors & Procedures (with Exception Handling):
+     -- Query: A stored procedure using a CURSOR to iterate through all doctors and calculate how many rooms they each manage. Incorporates a CONTINUE HANDLER for exception/loop control.
+     DELIMITER $$
+     CREATE PROCEDURE generate_doctor_report()
+     BEGIN
+         DECLARE done INT DEFAULT FALSE;
+         DECLARE v_doc_id INT;
+         DECLARE v_doc_name VARCHAR(30);
+         DECLARE v_room_count INT;
+
+         -- Declare cursor for selecting doctors
+         DECLARE curr_doctor CURSOR FOR SELECT docid, docname FROM doctor;
+
+         -- Declare exception handler (When cursor runs out of data)
+         DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+         -- Create temporary table to store report results
+         DROP TEMPORARY TABLE IF EXISTS temp_doctor_report;
+         CREATE TEMPORARY TABLE temp_doctor_report (
+             doctor_name VARCHAR(30),
+             rooms_managed INT
+         );
+
+         OPEN curr_doctor;
+
+         read_loop: LOOP
+             FETCH curr_doctor INTO v_doc_id, v_doc_name;
+             IF done THEN
+                 LEAVE read_loop;
+             END IF;
+
+             -- Calculate room count for current doctor
+             SELECT COUNT(*) INTO v_room_count FROM room WHERE doctor_id = v_doc_id;
+
+             -- Insert into temporary report table
+             INSERT INTO temp_doctor_report (doctor_name, rooms_managed) VALUES (v_doc_name, v_room_count);
+         END LOOP;
+
+         CLOSE curr_doctor;
+
+         -- Output the final report
+         SELECT * FROM temp_doctor_report;
+     END$$
+     DELIMITER ;
+
+     -- To use the procedure/cursor:
+     CALL generate_doctor_report();
+
+
+========================================================

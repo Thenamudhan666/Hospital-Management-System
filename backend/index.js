@@ -2,6 +2,7 @@ const express = require("express");
 const mysql = require("mysql2");
 const dotenv = require("dotenv");
 const path = require("path");
+const cors = require("cors");
 
 dotenv.config();
 
@@ -10,6 +11,7 @@ const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
+app.use(cors({ origin: "http://localhost:5173" }));
 
 // CORS Middleware (manual implementation since cors package is not installed)
 app.use((req, res, next) => {
@@ -126,6 +128,19 @@ app.post("/api/login", (req, res) => {
     } else {
       res.status(401).json({ error: "Invalid phone number or password" });
     }
+  });
+});
+
+// Fetch All Users Route
+app.get("/api/users", (req, res) => {
+  const query = "SELECT userid, username, userphno, usermail FROM user";
+
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Error fetching users:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+    res.status(200).json(results);
   });
 });
 
@@ -502,7 +517,40 @@ app.get("/api/doctor/:id/rooms", (req, res) => {
   });
 });
 
+// Create Appointments Table
+const createAppointmentsTable = `
+CREATE TABLE IF NOT EXISTS appointments (
+  appid INT AUTO_INCREMENT PRIMARY KEY,
+  timing VARCHAR(20),
+  docid INT,
+  reservation_id INT,
+  appspe VARCHAR(50),
+  appdate DATE,
+  status ENUM('pending', 'confirmed', 'cancelled', 'declined') DEFAULT 'pending',
+  duration INT CHECK (duration = 45),
+  notes TEXT,
+  service_type VARCHAR(50),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (docid) REFERENCES doctor(docid) ON DELETE CASCADE,
+  FOREIGN KEY (reservation_id) REFERENCES user(userid) ON DELETE CASCADE
+);
+`;
+
+db.query(createAppointmentsTable, (err, results) => {
+  if (err) {
+    console.error("Error creating appointments table:", err);
+  } else {
+    console.log("Appointments table ready");
+  }
+});
+
+// Appointment Routes
+const appointmentRoutes = require("./appointmentRoutes");
+app.use("/api/appointments", appointmentRoutes);
+
 // Catch-all route to serve the frontend index.html for any non-API routes
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
 });
+
+module.exports = { app, db };

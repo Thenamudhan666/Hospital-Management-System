@@ -11,13 +11,19 @@ const port = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 
-// CORS Middleware (manual implementation since cors package is not installed)
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
+});
+
+// CORS Middleware (Must be before routes)
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-user-id",
   );
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
@@ -25,19 +31,14 @@ app.use((req, res, next) => {
   next();
 });
 
+// Routes
+const appointmentRoutes = require("./appointmentRoutes");
+app.use("/api", appointmentRoutes);
+
 // Serve frontend static files
 app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-// Database Connection Pool
-const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
+const db = require("./db");
 
 // Verify connection
 db.getConnection((err, connection) => {
@@ -254,6 +255,67 @@ db.query(createDoctorTable, (err, results) => {
     console.error("Error creating doctor table:", err);
   } else {
     console.log("Doctor table ready");
+  }
+});
+
+// Create Appointment Table (Singular, matching screenshot)
+const createAppointmentsTable = `
+CREATE TABLE IF NOT EXISTS appointment (
+  appid INT AUTO_INCREMENT PRIMARY KEY,
+  reservation_id INT,
+  docid INT,
+  room_id INT,
+  timing DATETIME,
+  appdate DATE,
+  status ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending',
+  priority ENUM('Low', 'Medium', 'High') DEFAULT 'Medium',
+  duration INT DEFAULT 45,
+  notes TEXT,
+  service_type VARCHAR(50) DEFAULT 'General Consultation',
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (docid) REFERENCES doctor(docid) ON DELETE CASCADE,
+  FOREIGN KEY (reservation_id) REFERENCES user(userid) ON DELETE SET NULL,
+  FOREIGN KEY (room_id) REFERENCES room(room_id) ON DELETE SET NULL
+) AUTO_INCREMENT=1;
+`;
+
+db.query(createAppointmentsTable, (err, results) => {
+  if (err) {
+    console.error("Error creating appointment table:", err);
+  } else {
+    console.log("Appointment table ready (singular)");
+    
+    // SAFE MIGRATION: Check if columns exist before adding them
+    const checkColumns = "SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'appointment' AND TABLE_SCHEMA = DATABASE()";
+    
+    db.query(checkColumns, (err, results) => {
+      if (err) {
+        console.error("Error checking columns:", err.message);
+        return;
+      }
+      
+      const existingColumns = results.map(r => r.COLUMN_NAME);
+      
+      if (!existingColumns.includes('priority')) {
+        console.log("Adding 'priority' column to appointment table...");
+        db.query("ALTER TABLE appointment ADD COLUMN priority ENUM('Low', 'Medium', 'High') DEFAULT 'Medium'", (err) => {
+          if (err) console.error("Error adding priority column:", err.message);
+        });
+      }
+      
+      if (!existingColumns.includes('room_id')) {
+        console.log("Adding 'room_id' column to appointment table...");
+        db.query("ALTER TABLE appointment ADD COLUMN room_id INT", (err) => {
+          if (err) {
+            console.error("Error adding room_id column:", err.message);
+          } else {
+            db.query("ALTER TABLE appointment ADD FOREIGN KEY (room_id) REFERENCES room(room_id) ON DELETE SET NULL", (err) => {
+               if (err) console.error("Error adding room_id FK:", err.message);
+            });
+          }
+        });
+      }
+    });
   }
 });
 
@@ -500,6 +562,11 @@ app.get("/api/doctor/:id/rooms", (req, res) => {
     }
     res.status(200).json(results);
   });
+});
+
+// API 404 handler
+app.use("/api", (req, res) => {
+  res.status(404).json({ error: `API route ${req.method} ${req.url} not found` });
 });
 
 // Catch-all route to serve the frontend index.html for any non-API routes

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import DoctorScheduler from "./DoctorScheduler";
 import "../styles/doctor-home.css";
 
 function DoctorHome() {
@@ -70,9 +71,14 @@ function DoctorHome() {
             <p>{doctor.specialisation} Specialist</p>
           </div>
         </div>
-        <button onClick={handleLogout} className="btn-logout">
-          Logout
-        </button>
+        <div className="doctor-header-right">
+          <button className="btn-create-appointment" onClick={() => navigate("/select-slot")}>
+            <span>➕</span> Create New Appointment
+          </button>
+          <button onClick={handleLogout} className="btn-logout">
+            Logout
+          </button>
+        </div>
       </header>
 
       <div className="doctor-content">
@@ -88,6 +94,12 @@ function DoctorHome() {
             onClick={() => setActiveTab("appointments")}
           >
             <span>📅</span> My Rooms
+          </button>
+          <button
+            className={`tab-btn ${activeTab === "scheduler" ? "active" : ""}`}
+            onClick={() => setActiveTab("scheduler")}
+          >
+            <span>⏰</span> Appointment Schedule
           </button>
           <button
             className={`tab-btn ${activeTab === "settings" ? "active" : ""}`}
@@ -198,6 +210,12 @@ function DoctorHome() {
                 ))}
               </div>
             )}
+          </div>
+        )}
+
+        {activeTab === "scheduler" && (
+          <div className="tab-content">
+            <DoctorScheduler doctorId={doctor.id} />
           </div>
         )}
 

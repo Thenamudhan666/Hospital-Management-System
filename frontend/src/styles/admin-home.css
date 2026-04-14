@@ -275,43 +275,55 @@
 }
 
 .room-card.available {
-  border-top-color: #4caf50;
+  border-top-color: #0ea5e9;
 }
 
-.room-card.occupied {
-  border-top-color: #f44336;
+.room-card.reserved {
+  border-top-color: #f59e0b;
 }
 
-.room-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  margin-bottom: 16px;
-}
-
-.room-header h3 {
-  font-size: 18px;
-  margin: 0;
-  color: #1a1a1a;
-  font-weight: 700;
-}
-
-.status-badge {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
+.room-card.confirmed {
+  border-top-color: #10b981;
 }
 
 .status-badge.available {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: #f0f9ff;
+  color: #0369a1;
 }
 
-.status-badge.occupied {
-  background: #ffebee;
-  color: #c62828;
+.status-badge.reserved {
+  background: #fffbeb;
+  color: #b45309;
+}
+
+.status-badge.confirmed {
+  background: #ecfdf5;
+  color: #047857;
+}
+
+.room-section-header {
+  margin: 2rem 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid rgba(0,0,0,0.05);
+}
+
+.room-section-header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.room-count-badge {
+  background: #f1f5f9;
+  color: #64748b;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
 }
 
 .room-info {

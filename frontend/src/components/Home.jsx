@@ -19,7 +19,7 @@ function Home() {
   const userId = user?.id || "N/A";
 
   const handleBookAppointment = () => {
-    alert("Book an appointment functionality coming soon!");
+    navigate("/book-appointment");
   };
 
   const handleRequestAdmission = () => {

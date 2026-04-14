@@ -10,6 +10,9 @@ import DoctorSignup from "./components/DoctorSignup";
 import DoctorHome from "./components/DoctorHome";
 import AdminLogin from "./components/AdminLogin";
 import AdminHome from "./components/AdminHome";
+import SelectAppointmentSlot from "./components/SelectAppointmentSlot";
+import AppointmentBooking from "./components/AppointmentBooking";
+import PatientConfirm from "./components/PatientConfirm";
 
 function App() {
   return (
@@ -20,11 +23,14 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin-home" element={<AdminHome />} />
+        <Route path="/select-slot" element={<SelectAppointmentSlot />} />
         <Route path="/doctor-login" element={<DoctorLogin />} />
         <Route path="/doctor-signup" element={<DoctorSignup />} />
         <Route path="/doctor-home" element={<DoctorHome />} />
         <Route path="/home" element={<Home />} />
         <Route path="/room-booking" element={<RoomBooking />} />
+        <Route path="/book-appointment" element={<AppointmentBooking />} />
+        <Route path="/appointment-confirmation" element={<PatientConfirm />} />
       </Routes>
     </BrowserRouter>
   );

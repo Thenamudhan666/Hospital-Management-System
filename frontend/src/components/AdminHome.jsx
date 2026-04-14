@@ -196,6 +196,88 @@ function AdminHome() {
     }));
   };
 
+  const renderRoomCard = (room) => (
+    <div
+      key={room.room_id}
+      className={`room-card ${room.room_status.toLowerCase()}`}
+    >
+      <div className="room-header">
+        <h3>Room {room.room_id}</h3>
+        <span className={`status-badge ${room.room_status.toLowerCase()}`}>
+          {room.room_status}
+        </span>
+      </div>
+      <div className="room-info">
+        <p>
+          <strong>Type:</strong> {room.room_type}
+        </p>
+        {room.user_name && (
+          <p>
+            <strong>Patient:</strong> {room.user_name}
+          </p>
+        )}
+        <div className="assign-doctor-section">
+          <label htmlFor={`doctor-${room.room_id}`}>
+            <strong>Doctor:</strong>
+          </label>
+          <select
+            id={`doctor-${room.room_id}`}
+            value={room.doctor_name || ""}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (val) {
+                const [docId, ...nameParts] = val.split("|");
+                handleAssignDoctor(
+                  room.room_id,
+                  parseInt(docId),
+                  nameParts.join("|"),
+                );
+              }
+            }}
+            className="doctor-select"
+          >
+            <option value="">Select Doctor</option>
+            {doctors.map((doc) => (
+              <option key={doc.id} value={`${doc.id}|${doc.name}`}>
+                {doc.name} - {doc.specialisation}
+              </option>
+            ))}
+          </select>
+        </div>
+        {room.room_status === "Reserved" && (
+          <div className="room-actions">
+            <button
+              className="btn-confirm"
+              onClick={() => handleConfirmRoom(room.room_id)}
+              disabled={!room.doctor_name}
+              title={
+                !room.doctor_name
+                  ? "Assign a doctor to confirm"
+                  : "Confirm Admission"
+              }
+            >
+              Confirm
+            </button>
+            <button
+              className="btn-cancel"
+              onClick={() => handleCancelRoom(room.room_id)}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
+        <div className="room-actions" style={{ marginTop: "10px" }}>
+          <button
+            className="btn-delete"
+            onClick={() => handleDeleteRoom(room.room_id)}
+          >
+            🗑️ Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   const handleLogout = () => {
     localStorage.removeItem("admin");
     navigate("/");
@@ -303,112 +385,52 @@ function AdminHome() {
                 </div>
               )}
 
-              <div className="rooms-grid animate-slide-up">
+              <div className="rooms-management-sections animate-slide-up">
                 {rooms.length === 0 ? (
-                  <p
-                    style={{
-                      gridColumn: "1 / -1",
-                      textAlign: "center",
-                      color: "#666",
-                    }}
-                  >
+                  <p style={{ textAlign: "center", color: "#666", padding: "3rem" }}>
                     No rooms available. Create one to get started.
                   </p>
                 ) : (
-                  rooms.map((room) => (
-                    <div
-                      key={room.room_id}
-                      className={`room-card ${
-                        room.room_status === "Available"
-                          ? "available"
-                          : "occupied"
-                      }`}
-                    >
-                      <div className="room-header">
-                        <h3>Room {room.room_id}</h3>
-                        <span
-                          className={`status-badge ${
-                            room.room_status === "Available"
-                              ? "available"
-                              : "occupied"
-                          }`}
-                        >
-                          {room.room_status}
-                        </span>
-                      </div>
-                      <div className="room-info">
-                        <p>
-                          <strong>Type:</strong> {room.room_type}
-                        </p>
-                        {room.user_name && (
-                          <p>
-                            <strong>Patient:</strong> {room.user_name}
-                          </p>
-                        )}
-                        <div className="assign-doctor-section">
-                          <label htmlFor={`doctor-${room.room_id}`}>
-                            <strong>Doctor:</strong>
-                          </label>
-                          <select
-                            id={`doctor-${room.room_id}`}
-                            value={room.doctor_name || ""}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              if (val) {
-                                const [docId, ...nameParts] = val.split("|");
-                                handleAssignDoctor(
-                                  room.room_id,
-                                  parseInt(docId),
-                                  nameParts.join("|"),
-                                );
-                              }
-                            }}
-                            className="doctor-select"
-                          >
-                            <option value="">Select Doctor</option>
-                            {doctors.map((doc) => (
-                              <option
-                                key={doc.id}
-                                value={`${doc.id}|${doc.name}`}
-                              >
-                                {doc.name} - {doc.specialisation}
-                              </option>
-                            ))}
-                          </select>
+                  <>
+                    {/* 1. Reserved Section (Needs Attention) */}
+                    {rooms.some(r => r.room_status === "Reserved") && (
+                      <div className="room-category-block">
+                        <div className="room-section-header">
+                          <h3>⚠️ Action Required: Reserved</h3>
+                          <span className="room-count-badge">{rooms.filter(r => r.room_status === "Reserved").length}</span>
                         </div>
-                        {room.room_status === "Reserved" && (
-                          <div className="room-actions">
-                            <button
-                              className="btn-confirm"
-                              onClick={() => handleConfirmRoom(room.room_id)}
-                              disabled={!room.doctor_name}
-                              title={
-                                !room.doctor_name
-                                  ? "Assign a doctor to confirm"
-                                  : "Confirm Admission"
-                              }
-                            >
-                              Confirm
-                            </button>
-                            <button
-                              className="btn-cancel"
-                              onClick={() => handleCancelRoom(room.room_id)}
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        )}
-                        <div className="room-actions" style={{ marginTop: '10px' }}>
-                          <button
-                            className="btn-delete"
-                            onClick={() => handleDeleteRoom(room.room_id)}
-                          >
-                            🗑️ Delete Room
-                          </button>
+                        <div className="rooms-grid">
+                          {rooms.filter(r => r.room_status === "Reserved").map(room => renderRoomCard(room))}
                         </div>
                       </div>
-                    </div>
-                  ))
+                    )}
+
+                    {/* 2. Confirmed Section (Occupied) */}
+                    {rooms.some(r => r.room_status === "Confirmed") && (
+                      <div className="room-category-block">
+                        <div className="room-section-header">
+                          <h3>🏥 Confirmed Admissions</h3>
+                          <span className="room-count-badge">{rooms.filter(r => r.room_status === "Confirmed").length}</span>
+                        </div>
+                        <div className="rooms-grid">
+                          {rooms.filter(r => r.room_status === "Confirmed").map(room => renderRoomCard(room))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 3. Available Section */}
+                    {rooms.some(r => r.room_status === "Available") && (
+                      <div className="room-category-block">
+                        <div className="room-section-header">
+                          <h3>✅ Available Rooms</h3>
+                          <span className="room-count-badge">{rooms.filter(r => r.room_status === "Available").length}</span>
+                        </div>
+                        <div className="rooms-grid">
+                          {rooms.filter(r => r.room_status === "Available").map(room => renderRoomCard(room))}
+                        </div>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
